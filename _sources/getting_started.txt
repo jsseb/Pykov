@@ -1,0 +1,391 @@
+.. _getting_started:
+
+***********
+About Pykov
+***********
+
+Pykov is Python module about finite Markov chains. You can define a Markov
+chain from scratch or read it from a text file according specific format. Pykov
+is versatile, being it able to manipulate the chain, inserting and removing nodes, and to calculate
+various kind of quantities, like the steady state distribution, mean first
+passage times, random walks, absorbing times, and so on.
+Pykov is also really fast, being it based on Pysparse, a sparse matrix
+library for Python.
+
+Pykov is licensed under the terms of the GNU General Public License as
+published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Click `here <https://github.com/riccardoscalco/Pykov>`_ to download Pykov.
+
+Pykov would like to be a collaborative project. Any help is welcome, from
+a bug notification to a more demanding collaboration. Please refer to my
+`github webpage <https://github.com/riccardoscalco>`_ for contacts.
+
+****************
+Installing Pykov
+****************
+
+Pykov consists in a single module file, put it on your personal Python library
+and voilà.
+
+Dependences
+===========
+
+Pykov depends on
+
+* Python 2.7.1
+* Numpy 1.5.1
+* Pysparse 1.1
+
+.. warning::
+   
+   Although a lower version for Python and Numpy could be fine, version 1.1 of
+   Pysparse is strictly required.
+
+
+***************
+Getting started
+***************
+
+You can define a Markov
+chain from scratch or read it from a text file according specific format.
+
+From scratch
+============
+It is easily possible to define a :class:`Chain` instance considering that it
+inherits from python class :class:`dict`.
+
+        >>> P = pykov.Chain()
+        >>> P[('A','B')]=.3
+        >>> P
+        {('A', 'B'): 0.3}
+        >>> T = pykov.Chain({('A','B'): .3, ('A','A'): .7, ('B','A'): 1.})
+        >>> T
+        {('B', 'A'): 1.0, ('A', 'B'): 0.3, ('A', 'A'): 0.7}
+
+
+Reading a txt file
+==================
+Here there are two possibilities, depending on the information contained on the
+txt file.
+
+From a transition matrix
+------------------------
+
+In the easiest case the file ``/mypath/mat`` contains the transition matrix, and it
+has the following format::
+
+        A A .7 
+        A B .3
+        B A 1
+
+Then, the corresponding :class:`Chain` instance is created with the command:
+
+        >>> P = pykov.readmat('/mypath/mat')
+        >>> P
+        {('B', 'A'): 1.0, ('A', 'B'): 0.3, ('A', 'A'): 0.7}
+
+
+From a finite chain
+-------------------
+
+In the case the :class:`Chain` instance must be created from a finite chain of
+states, the transition matrix is not fully defined. The following
+function defines the transition probabilities as the maximum likelihood
+probabilities calculated along the chain. Having the file ``/mypath/trj`` with the following
+format::
+        
+        1
+        1
+        1
+        2
+        1
+        3
+        
+the :class:`Chain` instance defined from that chain is:
+
+        >>> t = pykov.readtrj('/mypath/trj')
+        >>> t
+        (1, 1, 1, 2, 1, 3)
+        >>> p, P = maximum_likelihood_probabilities(t,lag_time=1, separator='0')
+        >>> p
+        {1: 0.6666666666666666, 2: 0.16666666666666666, 3: 0.16666666666666666}
+        >>> P
+        {(1, 2): 0.25, (1, 3): 0.25, (1, 1): 0.5, (2, 1): 1.0, (3, 3): 1.0}
+        >>> type(P)
+        <class 'pykov.Chain'>
+        >>> type(p)
+        <class 'pykov.Vector'>
+
+.. note::
+   
+   Here there are the mathematical details. Let the chain be ``(1,1,1,2,1,3)``,
+   then the list of its links, with ``lag-time=1``, is
+   ``[(1,1),(1,1),(1,2),(2,1),(1,3)]`` (with ``lag-time=2`` the list is
+   ``[(1,1),(1,2),(1,1),(2,3)]``, which means that states separated by two steps
+   are linked to each other).
+   Before to defines the probabilities of interest, all the dead branchs are
+   removed from the list of links, in the example the dead brach is in state
+   ``3`` because ``3`` has no successors, in the sense that there
+   are not links having state ``3`` as first state. The dead branch is removed
+   inserting an autoloop, in the example the list of links becomes
+   ``[(1,1),(1,1),(1,2),(2,1),(1,3),(3,3)]``.
+
+   Let ``q[(i,j)]`` the probability to find the link
+   ``(i,j)`` in the list, for example ``q[(1,1)]`` is:
+
+   .. math::
+      
+      q_{1,1}=\frac{2}{6}
+   ..
+
+   Then the probability of state ``i`` and the transition probability
+   between states ``i`` and ``j`` are the defined as:
+
+   .. math::
+      
+      p_i = \sum_j q_{ij} \\
+      P_{ij}=\frac{q_{ij}}{p_i}
+   ..
+
+   The ``separator`` keyword has the following meaning: all the links that have
+   ``separator`` as initial or final state are removed from the list.
+
+
+*******************
+Classes and Methods
+*******************
+
+Vector Class
+============
+
+
+The :class:`Vector` class inherits from python class :class:`dict`, which means
+it has the same behaviors and features of python dictionaries, with few
+exceptions. The states and the corresponding probabilities are the ``keys`` and
+the ``values`` of the dictionary, respectively.
+
+Manipulation of a Vector
+------------------------
+
+Definitions
++++++++++++
+
+        >>> pykov.Vector({'A':.3, 'B':.7})
+        {'A':.3, 'B':.7}
+        >>> pykov.Vector(A=.3, B=.7)
+        {'A':.3, 'B':.7}
+
+Getting and setting items
++++++++++++++++++++++++++
+
+.. warning::
+
+   States not belonging to the vector have zero probability. Do not use
+   :meth:`keys()` method to eveluate the set of states of the Markov
+   chain, use instead the :meth:`states()` method of :class:`Chain` class.
+..
+
+        >>> q = pykov.Vector(C=.4, B=.6)
+        >>> q['C']
+        0.4
+        >>> q['Z']
+        0.0
+        >>> 'Z' in q
+        False
+
+.. warning::
+
+   Setting a state to zero probability is like removing the state.
+..
+
+        >>> q = pykov.Vector(C=.4, B=.6)
+        >>> q['Z']=.2
+        >>> q
+        {'C': 0.4, 'B': 0.6, 'Z': 0.2}
+        >>> q['Z']=0
+        >>> q
+        {'C': 0.4, 'B': 0.6}
+
+
+
+Vector operations
+-----------------
+
+Sum
++++
+
+A ``Vector`` instance can be added or substracted to another ``Vector``
+instance.
+
+        >>> p = pykov.Vector(A=.3, B=.7)
+        >>> q = pykov.Vector(C=.5, B=.5)
+        >>> p + q
+        {'A': 0.3, 'C': 0.5, 'B': 1.2}
+        >>> p - q
+        {'A': 0.3, 'C': -0.5, 'B': 0.2}
+        >>> q - p
+        {'A': -0.3, 'C': 0.5, 'B': -0.2}
+
+Product
++++++++
+
+A ``Vector`` instance can be multiplied by a ``scalar``, another ``Vector`` and
+a ``Chain`` or ``Matrix`` instance.
+
+        >>> p = pykov.Vector(A=.3, B=.7)
+        >>> p * 3
+        {'A': 0.9, 'B': 2.1}
+        >>> 3 * p
+        {'A': 0.9, 'B': 2.1}
+        >>> q = pykov.Vector(C=.5, B=.5)
+        >>> p * q
+        0.35
+        >>> T = pykov.Matrix({('A','B'): .3, ('A','A'): .7, ('B','A'): 1.})
+        >>> p * T
+        {'A': 0.91, 'B': 0.09}
+        >>> T * p
+        {'A': 0.42, 'B': 0.3}
+
+Methods
+-------
+.. autoclass:: pykov.Vector
+   :members: sum, sort, choose, normalize, copy, entropy, dist, relative_entropy
+
+
+Matrix Class
+============
+
+The :class:`Matrix` class inherits from python class :class:`dict`.
+The ``dict keys`` are ``tuple`` of indexes, the ``dict values`` are the matrix
+entries.
+
+.. note::
+   
+   Indexes do not need to be ``int``, they can be ``string``.
+
+Manipulation of a Matrix
+------------------------
+
+Definitions
++++++++++++
+
+        >>> T = pykov.Matrix({('A','B'): .3, ('A','A'): .7, ('B','A'): 1.})
+
+Getting and setting items
++++++++++++++++++++++++++
+
+.. note::
+
+   Couples of states with zero transition probability do not appear among the
+   ``keys``, but they get zero if asked. In other words, the ``keys`` set
+   contains only the non-zero transitions.
+..
+
+
+        >>> T = pykov.Matrix({('A','B'): .3, ('A','A'): .7, ('B','A'): 1.})
+        >>> T[('A','B')]
+        0.3
+        >>> T['A','B']
+        0.3
+        >>> T['B','B']
+        0.0
+
+
+        >>> T = pykov.Matrix()
+        >>> T[('A','B')] = .3
+        >>> T
+        {('A', 'B'): 0.3}
+        >>> T['A','A'] = .7
+        >>> T
+        {('A', 'B'): 0.3, ('A', 'A'): 0.7}
+        >>> T['B','B'] = 0
+        >>> T
+        {('A', 'B'): 0.3, ('A', 'A'): 0.7}
+        >>> T['A','A'] = 0
+        >>> T
+        {('A', 'B'): 0.3}
+
+.. warning::
+   
+   States without ingoing or outgoing transitions are removed from the set of
+   states.
+..
+
+        >>> T = pykov.Matrix({('A','B'): 3, ('A','A'): 7, ('B','A'): .1})
+        >>> T.states()
+        set(['A', 'B'])
+        >>> T['A','C']=1
+        >>> T.states()
+        set(['A', 'C', 'B'])
+        >>> T['A','C']=0
+        >>> T.states()
+        set(['A', 'B'])
+
+Matrix operations
+-----------------
+
+Sum
++++++++
+
+A ``Matrix`` instance can be added or substracted to another ``Matrix``
+instance.
+
+
+        >>> T = pykov.Matrix({('A','B'): .3, ('A','A'): .7, ('B','A'): 1.})
+        >>> I = pykov.Matrix({('A','A'):1, ('B','B'):1})
+        >>> T + I
+        {('B', 'A'): 1.0, ('A', 'B'): 0.3, ('A', 'A'): 1.7, ('B', 'B'): 1.0}
+
+
+        >>> T = pykov.Matrix({('A','B'): .3, ('A','A'): .7, ('B','A'): 1.})
+        >>> I = pykov.Matrix({('A','A'):1, ('B','B'):1})
+        >>> T - I
+        {('B', 'A'): 1.0, ('A', 'B'): 0.3, ('A', 'A'): -0.3, ('B', 'B'): -1}
+
+Product
++++++++
+
+A ``Matrix`` instance can be multiplied by a ``scalar``, a ``Vector`` or
+another ``Matrix`` instance.
+
+        >>> T = pykov.Matrix({('A','B'): .3, ('A','A'): .7, ('B','A'): 1.})
+        >>> T * 3
+        {('B', 'A'): 3.0, ('A', 'B'): 0.9, ('A', 'A'): 2.1}
+        >>> p = pykov.Vector(A=.3, B=.7)
+        >>> T * p
+        {'A': 0.42, 'B': 0.3}
+        >>> W = pykov.Matrix({('N', 'M'): 0.5, ('M', 'N'): 0.7,
+                              ('M', 'M'): 0.3, ('O', 'N'): 0.5,
+                              ('O', 'O'): 0.5, ('N', 'O'): 0.5})
+        >>> W * W
+        {('N', 'M'): 0.15, ('M', 'N'): 0.21, ('M', 'O'): 0.35,
+         ('M', 'M'): 0.44, ('O', 'M'): 0.25, ('O', 'N'): 0.25,
+         ('O', 'O'): 0.5, ('N', 'O'): 0.25, ('N', 'N'): 0.6}
+
+Methods
+-------
+
+.. autoclass:: pykov.Matrix
+   :members: states, pred, succ, copy, remove, stochastic, transpose, eye, ones, trace  
+
+
+Chain Class
+===========
+
+
+The :class:`Chain` class inherits from the :class:`Matrix` class.
+The ``dict
+keys`` are ``tuple`` of states, the ``dict values`` are the transition
+probability between the two states.
+The :class:`Chain` class methods are  
+
+
+Methods
+-------
+
+.. autoclass:: pykov.Chain
+   :members: adiacence, pow, move, walk, walk_probability, steady, mixing_time, entropy, mfpt_to, absorbing_time, absorbing_tour, fundamental_matrix, kemeny_constant 
+
