@@ -65,8 +65,22 @@ a bug notification to a more demanding collaboration. Please refer to my
 </div>
 <div class="section" id="installing-pykov">
 <h1>Installing Pykov<a class="headerlink" href="#installing-pykov" title="Permalink to this headline">¶</a></h1>
-<p>Pykov consists in a single module file, put it on your personal Python library
-and voilà.</p>
+<p>You can install Pykov in different ways.</p>
+<p>Pykov consists in a single Python module, so all you have to do is to download
+<tt class="file docutils literal"><span class="pre">pykov.py</span></tt> from <a class="reference external" href="https://github.com/riccardoscalco/Pykov">here</a> and
+move it in your personal Python library.</p>
+<p>Another solution is to ownload <tt class="file docutils literal"><span class="pre">pykov-1.0.tar.gz</span></tt> (or <tt class="file docutils literal"><span class="pre">.zip</span></tt>) from
+<a class="reference external" href="http://pypi.python.org/pypi/Pykov/1.0">the pypi pykov page</a>
+, unpack it, and&#8212;from the directory&#8212;run</p>
+<div class="highlight-python"><pre>python setup.py install</pre>
+</div>
+<p>which will ultimately copy <tt class="file docutils literal"><span class="pre">pykov.py</span></tt> to the appropriate directory
+in your Python installation.</p>
+<p>Lastly, you can use <cite>easy_install</cite> to install it, simply run:</p>
+<div class="highlight-python"><pre>easy_install pykov</pre>
+</div>
+<p>(please refer to the <a class="reference external" href="http://packages.python.org/distribute/easy_install.html">easy_install documentation</a> to install and use
+<cite>easy_install</cite>.)</p>
 <div class="section" id="dependences">
 <h2>Dependences<a class="headerlink" href="#dependences" title="Permalink to this headline">¶</a></h2>
 <p>Pykov depends on</p>
@@ -82,8 +96,8 @@ Pysparse is strictly required.</p>
 </div>
 </div>
 </div>
-<div class="section" id="id1">
-<h1>Getting started<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="id2">
+<h1>Getting started<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h1>
 <p>You can define a Markov
 chain from scratch or read it from a text file according specific format.</p>
 <div class="section" id="from-scratch">
@@ -403,14 +417,14 @@ entries.</p>
 </div>
 <div class="section" id="manipulation-of-a-matrix">
 <h3>Manipulation of a Matrix<a class="headerlink" href="#manipulation-of-a-matrix" title="Permalink to this headline">¶</a></h3>
-<div class="section" id="id2">
-<h4>Definitions<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h4>
+<div class="section" id="id3">
+<h4>Definitions<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h4>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">T</span> <span class="o">=</span> <span class="n">pykov</span><span class="o">.</span><span class="n">Matrix</span><span class="p">({(</span><span class="s">&#39;A&#39;</span><span class="p">,</span><span class="s">&#39;B&#39;</span><span class="p">):</span> <span class="o">.</span><span class="mi">3</span><span class="p">,</span> <span class="p">(</span><span class="s">&#39;A&#39;</span><span class="p">,</span><span class="s">&#39;A&#39;</span><span class="p">):</span> <span class="o">.</span><span class="mi">7</span><span class="p">,</span> <span class="p">(</span><span class="s">&#39;B&#39;</span><span class="p">,</span><span class="s">&#39;A&#39;</span><span class="p">):</span> <span class="mf">1.</span><span class="p">})</span>
 </pre></div>
 </div>
 </div>
-<div class="section" id="id3">
-<h4>Getting and setting items<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h4>
+<div class="section" id="id4">
+<h4>Getting and setting items<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h4>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">Couples of states with zero transition probability do not appear among the
@@ -461,8 +475,8 @@ states.</p>
 </div>
 <div class="section" id="matrix-operations">
 <h3>Matrix operations<a class="headerlink" href="#matrix-operations" title="Permalink to this headline">¶</a></h3>
-<div class="section" id="id4">
-<h4>Sum<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h4>
+<div class="section" id="id5">
+<h4>Sum<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h4>
 <p>A <tt class="docutils literal"><span class="pre">Matrix</span></tt> instance can be added or substracted to another <tt class="docutils literal"><span class="pre">Matrix</span></tt>
 instance.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">T</span> <span class="o">=</span> <span class="n">pykov</span><span class="o">.</span><span class="n">Matrix</span><span class="p">({(</span><span class="s">&#39;A&#39;</span><span class="p">,</span><span class="s">&#39;B&#39;</span><span class="p">):</span> <span class="o">.</span><span class="mi">3</span><span class="p">,</span> <span class="p">(</span><span class="s">&#39;A&#39;</span><span class="p">,</span><span class="s">&#39;A&#39;</span><span class="p">):</span> <span class="o">.</span><span class="mi">7</span><span class="p">,</span> <span class="p">(</span><span class="s">&#39;B&#39;</span><span class="p">,</span><span class="s">&#39;A&#39;</span><span class="p">):</span> <span class="mf">1.</span><span class="p">})</span>
@@ -478,8 +492,8 @@ instance.</p>
 </pre></div>
 </div>
 </div>
-<div class="section" id="id5">
-<h4>Product<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h4>
+<div class="section" id="id6">
+<h4>Product<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h4>
 <p>A <tt class="docutils literal"><span class="pre">Matrix</span></tt> instance can be multiplied by a <tt class="docutils literal"><span class="pre">scalar</span></tt>, a <tt class="docutils literal"><span class="pre">Vector</span></tt> or
 another <tt class="docutils literal"><span class="pre">Matrix</span></tt> instance.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">T</span> <span class="o">=</span> <span class="n">pykov</span><span class="o">.</span><span class="n">Matrix</span><span class="p">({(</span><span class="s">&#39;A&#39;</span><span class="p">,</span><span class="s">&#39;B&#39;</span><span class="p">):</span> <span class="o">.</span><span class="mi">3</span><span class="p">,</span> <span class="p">(</span><span class="s">&#39;A&#39;</span><span class="p">,</span><span class="s">&#39;A&#39;</span><span class="p">):</span> <span class="o">.</span><span class="mi">7</span><span class="p">,</span> <span class="p">(</span><span class="s">&#39;B&#39;</span><span class="p">,</span><span class="s">&#39;A&#39;</span><span class="p">):</span> <span class="mf">1.</span><span class="p">})</span>
@@ -499,8 +513,8 @@ another <tt class="docutils literal"><span class="pre">Matrix</span></tt> instan
 </div>
 </div>
 </div>
-<div class="section" id="id6">
-<h3>Methods<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id7">
+<h3>Methods<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h3>
 <dl class="class">
 <dt id="pykov.Matrix">
 <em class="property">class </em><tt class="descclassname">pykov.</tt><tt class="descname">Matrix</tt><big>(</big><em>data=None</em><big>)</big><a class="reference internal" href="_modules/pykov.html#Matrix"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pykov.Matrix" title="Permalink to this definition">¶</a></dt>
@@ -648,8 +662,8 @@ The <tt class="docutils literal"><span class="pre">dict</span>
 <span class="pre">keys</span></tt> are <tt class="docutils literal"><span class="pre">tuple</span></tt> of states, the <tt class="docutils literal"><span class="pre">dict</span> <span class="pre">values</span></tt> are the transition
 probability between the two states.
 The <tt class="xref py py-class docutils literal"><span class="pre">Chain</span></tt> class methods are</p>
-<div class="section" id="id7">
-<h3>Methods<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id8">
+<h3>Methods<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h3>
 <dl class="class">
 <dt id="pykov.Chain">
 <em class="property">class </em><tt class="descclassname">pykov.</tt><tt class="descname">Chain</tt><big>(</big><em>data=None</em><big>)</big><a class="reference internal" href="_modules/pykov.html#Chain"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pykov.Chain" title="Permalink to this definition">¶</a></dt>
@@ -935,7 +949,7 @@ Springer-Verlag: New York, 1976.</p>
 <li><a class="reference internal" href="#dependences">Dependences</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id1">Getting started</a><ul>
+<li><a class="reference internal" href="#id2">Getting started</a><ul>
 <li><a class="reference internal" href="#from-scratch">From scratch</a></li>
 <li><a class="reference internal" href="#reading-a-txt-file">Reading a txt file</a><ul>
 <li><a class="reference internal" href="#from-a-transition-matrix">From a transition matrix</a></li>
@@ -961,20 +975,20 @@ Springer-Verlag: New York, 1976.</p>
 </li>
 <li><a class="reference internal" href="#matrix-class">Matrix Class</a><ul>
 <li><a class="reference internal" href="#manipulation-of-a-matrix">Manipulation of a Matrix</a><ul>
-<li><a class="reference internal" href="#id2">Definitions</a></li>
-<li><a class="reference internal" href="#id3">Getting and setting items</a></li>
+<li><a class="reference internal" href="#id3">Definitions</a></li>
+<li><a class="reference internal" href="#id4">Getting and setting items</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#matrix-operations">Matrix operations</a><ul>
-<li><a class="reference internal" href="#id4">Sum</a></li>
-<li><a class="reference internal" href="#id5">Product</a></li>
+<li><a class="reference internal" href="#id5">Sum</a></li>
+<li><a class="reference internal" href="#id6">Product</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id6">Methods</a></li>
+<li><a class="reference internal" href="#id7">Methods</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#chain-class">Chain Class</a><ul>
-<li><a class="reference internal" href="#id7">Methods</a></li>
+<li><a class="reference internal" href="#id8">Methods</a></li>
 </ul>
 </li>
 </ul>
