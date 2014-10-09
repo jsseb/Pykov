@@ -162,6 +162,7 @@ Return the Shannon entropy, defined as:
 
 ![equation](http://latex.codecogs.com/gif.latex?%24H%28p%29%20%3D%20%5Csum_i%20p_i%20%5Cln%20p_i%24)
 
+
 ```python
 >>> p = pykov.Vector(A=.3, B=.7)
 >>> p.entropy()
@@ -170,7 +171,10 @@ Return the Shannon entropy, defined as:
 For further details, have a look at *Khinchin A. I., Mathematical Foundations of Information Theory Dover, 1957*.
 
 #####**dist(q)**
-Return the distance to another `pykov.Vector`, defined as $d(p,q) = \sum_i | p_i - q_i |$. 
+Return the distance to another `pykov.Vector`, defined as :
+
+![equation](http://latex.codecogs.com/gif.latex?%24d%28p%2Cq%29%20%3D%20%5Csum_i%20%7C%20p_i%20-%20q_i%20%7C%24)
+
 ```python
 >>> p = pykov.Vector(A=.3, B=.7)
 >>> q = pykov.Vector(C=.5, B=.5)
@@ -179,7 +183,10 @@ Return the distance to another `pykov.Vector`, defined as $d(p,q) = \sum_i | p_i
 ```
 
 #####**relative_entropy(q)**
-Return the *Kullback-Leibler* distance, defined as $d(p,q) = \sum_i p_i \ln (p_i/q_i)$.
+Return the *Kullback-Leibler* distance, defined as:
+
+![equation](http://latex.codecogs.com/gif.latex?%24d%28p%2Cq%29%20%3D%20%5Csum_i%20p_i%20%5Cln%20%28p_i/q_i%29%24)
+
 ```python
 >>> p = pykov.Vector(A=.3, B=.7)
 >>> q = pykov.Vector(A=.4, B=.6)
@@ -446,12 +453,14 @@ Return the steady state, i.e. the equilibrium distribution of the chain.
 >>> T.steady()
 {'A': 0.7692307692307676, 'B': 0.23076923076923028}
 ```
-The steady state $x$ is calculated with the *inverse iteration method* $Q^t x = e$, where $Q = I - T$ and $e = (0,0,...,1)$.
+The steady state $x$ is calculated with the *inverse iteration method*: 
+![equation](http://latex.codecogs.com/gif.latex?%24Q%5Et%20x%20%3D%20e%24%2C%5Chspace%7B2%20mm%7D%20where%5Chspace%7B2%20mm%7D%20%24Q%20%3D%20I%20-%20T%24%20%2C%20%5Chspace%7B2%20mm%7D%24e%20%3D%20%280%2C0%2C...%2C1%29%24)
 
 For further details, have a look at *W. Stewart, Introduction to the Numerical Solution of Markov Chains, Princeton University Press, Chichester, West Sussex, 1994*.
 
 #####**mixing_time(cutoff=0.25, jump=1, p=None)**
-Return the [mixing time](http://en.wikipedia.org/wiki/Markov_chain_mixing_time), defined as the number of steps needed to have $|pT^n - \pi|<0.25$, where $\pi$ is the steady state $\pi = \pi T$.
+Return the [mixing time](http://en.wikipedia.org/wiki/Markov_chain_mixing_time), defined as the number of steps needed to have 
+![equation](http://latex.codecogs.com/gif.latex?%5Chspace%7B2mm%7D%7CpT%5En%20-%20%5Cpi%7C%3C0.25%24%2C%5Chspace%7B2mm%7D%20where%5Chspace%7B2mm%7D%20%24%5Cpi%24%5Chspace%7B2mm%7D%20is%5Chspace%7B2mm%7D%20the%5Chspace%7B2mm%7D%20steady%5Chspace%7B2mm%7D%20state%5Chspace%7B2mm%7D%20%24%5Cpi%20%3D%20%5Cpi%20T%24.)
 
 If the initial distribution `p` is not indicated, then the iteration starts from the less probable state of the steady distribution. The parameter `jump` controls the iteration step, for example with `jump=2` n has values 2,4,6,8,..
 ```python
@@ -464,7 +473,9 @@ If the initial distribution `p` is not indicated, then the iteration starts from
 ```
 
 #####**entropy(p=None, norm=False)**
-Return the Chain entropy, defined as $H = \sum_i \pi_i H_i$, where $H_i=\sum_j T_{ij}\ln T_{ij}$.
+Return the Chain entropy, defined as : 
+![equation](http://latex.codecogs.com/gif.latex?%5Chspace%24H%20%3D%20%5Csum_i%20%5Cpi_i%20H_i%24%2C%20%5Chspace%7B2mm%7Dwhere%5Chspace%7B2mm%7D%20%24H_i%3D%5Csum_j%20T_%7Bij%7D%5Cln%20T_%7Bij%7D%24.)
+
 If `p` is not `None`, then the entropy is calculated with the indicated probability `pykov.Vector()`.
 ```python
 >>> T = pykov.Chain({('A','B'): .3, ('A','A'): .7, ('B','A'): 1.})
