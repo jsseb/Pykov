@@ -159,7 +159,9 @@ Return a shallow copy.
 
 #####**entropy()**
 Return the Shannon entropy, defined as:
+
 ![equation](http://latex.codecogs.com/gif.latex?%24H%28p%29%20%3D%20%5Csum_i%20p_i%20%5Cln%20p_i%24)
+
 ```python
 >>> p = pykov.Vector(A=.3, B=.7)
 >>> p.entropy()
